@@ -26,7 +26,7 @@ public class UserValidatorTest {
     private static final String EMPTY_PASSWORD = "";
     private static final String SHORT_PASSWORD = "12";
     private static final String LONG_PASSWORD = "123456789";
-    private static final String NOT_MATCHING_REGEX_PASSWORD = "іівцфцфцвфц2у23.є\\.хї";
+    private static final String NOT_MATCHING_REGEX_PASSWORD = "її№;$";
 
     @InjectMocks
     private UserValidator userValidator;
