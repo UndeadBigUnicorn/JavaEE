@@ -34,6 +34,8 @@ public class UserValidatorTest {
     @Mock
     private UserRepository userRepository;
 
+    private NewUser user;
+
 
     /*
      * Workaround to prevent `isLoginExists` freak out in tests due to the fact that the same login is used in every test
@@ -41,20 +43,20 @@ public class UserValidatorTest {
     @BeforeEach
     void setUp() {
         Mockito.when(userRepository.isLoginExists(LOGIN)).thenReturn(false);
-    }
 
-
-    /*
-     * New user should pass the validation and no errors should be thrown
-     */
-    @Test
-    void shouldNotThrowErrorsOnNewUser() {
-        NewUser user = NewUser.builder()
+        user = NewUser.builder()
                 .fullName(FULL_NAME)
                 .login(LOGIN)
                 .password(VALID_PASSWORD)
                 .build();
+    }
 
+
+    /*
+     * New valid user should pass the validation and no errors should be thrown
+     */
+    @Test
+    void shouldPassOnNewValidUser() {
         assertDoesNotThrow(() -> userValidator.validateNewUser(user));
     }
 
@@ -63,28 +65,21 @@ public class UserValidatorTest {
      * UserValidator should throw LoginExistsException when validating existing user
      */
     @Test
-    void shouldThrowLoginExistsExceptionOnExistingUser() {
-        // Override while from the setUp, because this test should definitely test such behaviour
+    void shouldNotPassOnExistingLogin() {
+        // Override value from the setUp, because this test should definitely test such behaviour
         Mockito.when(userRepository.isLoginExists(LOGIN)).thenReturn(true);
 
-        NewUser user = NewUser.builder()
-                .fullName(FULL_NAME)
-                .login(LOGIN)
-                .password(VALID_PASSWORD)
-                .build();
-
         LoginExistsException exception = assertThrows(LoginExistsException.class, () -> userValidator.validateNewUser(user));
-
         checkExceptionMessage(exception, String.format("Login %s already taken", user.getLogin()));
     }
 
 
     /*
      * UserValidator should throw ConstraintViolationException when password is too short, too long, is empty
-     * or when does not match regex
+     * or when it does not match regex
      */
     @Test
-    void shouldThrowConstraintViolationException() {
+    void shouldNotPassOnInvalidPasswords() {
         // empty password
         NewUser emptyPasswordUser = NewUser.builder()
                 .fullName(FULL_NAME)
@@ -92,9 +87,7 @@ public class UserValidatorTest {
                 .password(EMPTY_PASSWORD)
                 .build();
 
-        ConstraintViolationException exception1 = assertThrows(ConstraintViolationException.class, () -> userValidator.validateNewUser(emptyPasswordUser));
-
-        checkExceptionMessage(exception1, "You have errors in you object");
+        assertThrows(ConstraintViolationException.class, () -> userValidator.validateNewUser(emptyPasswordUser));
 
         // short password
         NewUser shortPasswordUser = NewUser.builder()
@@ -103,9 +96,7 @@ public class UserValidatorTest {
                 .password(SHORT_PASSWORD)
                 .build();
 
-        ConstraintViolationException exception2 = assertThrows(ConstraintViolationException.class, () -> userValidator.validateNewUser(shortPasswordUser));
-
-        checkExceptionMessage(exception2, "You have errors in you object");
+        assertThrows(ConstraintViolationException.class, () -> userValidator.validateNewUser(shortPasswordUser));
 
         // long password
         NewUser longPasswordUser = NewUser.builder()
@@ -114,9 +105,7 @@ public class UserValidatorTest {
                 .password(LONG_PASSWORD)
                 .build();
 
-        ConstraintViolationException exception3 = assertThrows(ConstraintViolationException.class, () -> userValidator.validateNewUser(longPasswordUser));
-
-        checkExceptionMessage(exception3, "You have errors in you object");
+        assertThrows(ConstraintViolationException.class, () -> userValidator.validateNewUser(longPasswordUser));
 
         // password does not match the regex
         NewUser notMatchingRegexPasswordUser = NewUser.builder()
@@ -125,9 +114,9 @@ public class UserValidatorTest {
                 .password(NOT_MATCHING_REGEX_PASSWORD)
                 .build();
 
-        ConstraintViolationException exception4 = assertThrows(ConstraintViolationException.class, () -> userValidator.validateNewUser(notMatchingRegexPasswordUser));
-
-        checkExceptionMessage(exception4, "You have errors in you object");
+        // exception message is always the same but it would be nice to test exception message at least once
+        ConstraintViolationException exception = assertThrows(ConstraintViolationException.class, () -> userValidator.validateNewUser(notMatchingRegexPasswordUser));
+        checkExceptionMessage(exception, "You have errors in you object");
     }
 
     private void checkExceptionMessage(RuntimeException exception, String message) {
