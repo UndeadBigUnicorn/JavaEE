@@ -1,6 +1,6 @@
 package com.undeadbigunicorn.demo.repository;
 
-import com.undeadbigunicorn.demo.controller.model.Book;
+import com.undeadbigunicorn.demo.dto.Book;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

@@ -1,4 +1,4 @@
-package com.undeadbigunicorn.demo.controller.model;
+package com.undeadbigunicorn.demo.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Value;
