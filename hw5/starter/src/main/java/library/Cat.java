@@ -1,7 +1,9 @@
 package library;
 
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.stereotype.Component;
 
+@Component
 public class Cat implements Animal, InitializingBean {
 
     public String name() {
