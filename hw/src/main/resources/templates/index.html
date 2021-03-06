@@ -7,12 +7,10 @@
 <body>
 <div class="container">
 
-    <form>
-        <div class="mb-3">
-            <div id="searchHelp" class="form-text">Search book by title or ISBN</div>
-            <input id="search" class="form-control" name="search" type="text" placeholder="keyword" aria-describedby="searchHelp">
-        </div>
-    </form>
+    <div class="mb-3">
+        <div id="searchHelp" class="form-text">Search book by title or ISBN</div>
+        <input id="search" class="form-control" name="search" type="text" placeholder="keyword" aria-describedby="searchHelp">
+    </div>
 
     <h2>Books</h2>
 
@@ -71,7 +69,7 @@
                     $('#books-counter').text(data.length);
                     data.forEach(book => {
                         $booksContainer.append(`<tr>
-                            <td>${book.title}</td>
+                            <td><a href="/book/${book.isbn}">${book.title}</a></td>
                             <td>${book.isbn}</td>
                             <td>${book.author}</td>
                             </tr>`)

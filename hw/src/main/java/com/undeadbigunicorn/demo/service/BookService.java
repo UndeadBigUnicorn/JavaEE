@@ -1,13 +1,13 @@
 package com.undeadbigunicorn.demo.service;
 
-import com.undeadbigunicorn.demo.dto.Book;
 import com.undeadbigunicorn.demo.repository.BookRepository;
+import com.undeadbigunicorn.demo.repository.entity.BookEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -16,18 +16,19 @@ public class BookService {
 
     private final BookRepository bookRepository;
 
-    public List<Book> listBooks() {
+    public List<BookEntity> listBooks() {
         return bookRepository.allBooks();
     }
 
-    public List<Book> listBooks(String keyword) {
-        return bookRepository.allBooks()
-                .stream()
-                .filter(book -> book.getTitle().contains(keyword) || book.getIsbn().contains(keyword))
-                .collect(Collectors.toList());
+    public List<BookEntity> listBooks(String keyword) {
+        return bookRepository.findByKeyword(keyword);
     }
 
-    public void addBook(final Book book) {
+    public void addBook(final BookEntity book) {
         bookRepository.saveNewBook(book);
+    }
+
+    public Optional<BookEntity> getBookByIsbn(final String isbn) {
+        return Optional.ofNullable(bookRepository.getBookByIsbn(isbn));
     }
 }

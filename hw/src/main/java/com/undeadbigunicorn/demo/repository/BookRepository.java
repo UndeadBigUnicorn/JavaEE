@@ -1,32 +1,44 @@
 package com.undeadbigunicorn.demo.repository;
 
-import com.undeadbigunicorn.demo.dto.Book;
+import com.undeadbigunicorn.demo.repository.entity.BookEntity;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class BookRepository {
 
-    private static final Map<String, Book> BOOK_DATABASE = initDatabase();
+    private final EntityManager entityManager;
 
-    public List<Book> allBooks() {
-        return new ArrayList<>(BOOK_DATABASE.values());
+    @Transactional
+    public List<BookEntity> allBooks() {
+        return entityManager.createQuery("FROM BookEntity", BookEntity.class).getResultList();
     }
 
-    public Book saveNewBook(final Book book) {
+    @Transactional
+    public BookEntity saveNewBook(final BookEntity book) {
         log.info("Saving new book: {}", book);
 
-        BOOK_DATABASE.put(book.getIsbn(), book);
-        return book;
+        return entityManager.merge(book);
     }
 
-    private static Map<String, Book> initDatabase() {
-        return new HashMap<>();
+    @Transactional
+    public BookEntity getBookByIsbn(final String isbn) {
+        return entityManager.find(BookEntity.class, isbn);
     }
+
+    @Transactional
+    public List<BookEntity> findByKeyword(final String keyword) {
+        return entityManager.createQuery("FROM BookEntity where isbn like :isbn or title like :title", BookEntity.class)
+                .setParameter("isbn", "%"+keyword+"%")
+                .setParameter("title", "%"+keyword+"%")
+                .getResultList();
+    }
+
 }

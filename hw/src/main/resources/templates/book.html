@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${book.title} + '-' + ${book.author}">Title</title>
+</head>
+<body>
+<div class="container">
+    <h1><span th:text="${book.title}">Book title</span> (<span class="text-muted" th:text="${book.isbn}">ISBN</span>)</h1>
+    <div>Written by <span th:text="${book.author}">Book author</span></div>
+</div>
+</body>
+</html>

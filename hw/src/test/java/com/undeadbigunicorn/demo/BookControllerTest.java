@@ -1,8 +1,8 @@
 package com.undeadbigunicorn.demo;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.undeadbigunicorn.demo.dto.Book;
 import com.undeadbigunicorn.demo.dto.BookResponseDto;
+import com.undeadbigunicorn.demo.repository.entity.BookEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -26,7 +26,7 @@ public class BookControllerTest {
 
     @Test
     void shouldAddBook() throws Exception {
-        final Book book = new Book("Dune", "11234-awdawd", "Frank Herbert");
+        final BookEntity book = new BookEntity("11234-awdawd", "Dune", "Frank Herbert");
         final String jsonRequest = objectMapper.writeValueAsString(book);
         final String expectedResponse = objectMapper.writeValueAsString(BookResponseDto.of("Dune", "success"));
 
@@ -38,7 +38,7 @@ public class BookControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.content().json(expectedResponse));
 
-        final ArrayList<Book> books = new ArrayList<>();
+        final ArrayList<BookEntity> books = new ArrayList<>();
         books.add(book);
         final String expectedBooksResponse = objectMapper.writeValueAsString(books);
 
