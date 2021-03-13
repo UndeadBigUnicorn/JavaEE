@@ -1,44 +1,26 @@
 package com.undeadbigunicorn.demo.repository;
 
 import com.undeadbigunicorn.demo.repository.entity.BookEntity;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
-@Slf4j
-@Component
-@RequiredArgsConstructor
-public class BookRepository {
+@Transactional
+@Repository
+public interface BookRepository extends JpaRepository<BookEntity, String> {
 
-    private final EntityManager entityManager;
+    List<BookEntity> findAll();
 
-    @Transactional
-    public List<BookEntity> allBooks() {
-        return entityManager.createQuery("FROM BookEntity", BookEntity.class).getResultList();
-    }
+    Optional<BookEntity> findByIsbn(final String isbn);
 
-    @Transactional
-    public BookEntity saveNewBook(final BookEntity book) {
-        log.info("Saving new book: {}", book);
+    Optional<BookEntity> findByTitle(final String title);
 
-        return entityManager.merge(book);
-    }
-
-    @Transactional
-    public BookEntity getBookByIsbn(final String isbn) {
-        return entityManager.find(BookEntity.class, isbn);
-    }
-
-    @Transactional
-    public List<BookEntity> findByKeyword(final String keyword) {
-        return entityManager.createQuery("FROM BookEntity where isbn like :isbn or title like :title", BookEntity.class)
-                .setParameter("isbn", "%"+keyword+"%")
-                .setParameter("title", "%"+keyword+"%")
-                .getResultList();
-    }
+    @Query("FROM BookEntity where isbn like :keyword or title like :keyword")
+    List<BookEntity> findByKeyword(@Param("keyword") final String keyword);
 
 }

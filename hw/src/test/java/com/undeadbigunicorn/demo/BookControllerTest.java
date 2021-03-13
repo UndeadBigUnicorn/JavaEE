@@ -26,7 +26,7 @@ public class BookControllerTest {
 
     @Test
     void shouldAddBook() throws Exception {
-        final BookEntity book = new BookEntity("11234-awdawd", "Dune", "Frank Herbert");
+        final BookEntity book = new BookEntity(1, "11234-awdawd", "Dune", "Frank Herbert");
         final String jsonRequest = objectMapper.writeValueAsString(book);
         final String expectedResponse = objectMapper.writeValueAsString(BookResponseDto.of("Dune", "success"));
 

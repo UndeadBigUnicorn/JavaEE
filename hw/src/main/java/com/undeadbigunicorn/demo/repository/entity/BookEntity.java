@@ -13,7 +13,12 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BookEntity {
+
     @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
+
     @Column(name = "isbn")
     private String isbn;
 
