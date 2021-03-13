@@ -17,11 +17,18 @@ import java.util.Optional;
 public class BookController {
 
     private final BookService bookService;
+    @Value("${pageSize}")
+    private Integer pageSize;
 
     @ResponseBody
     @GetMapping("/books")
-    public List<BookEntity> bookList(@RequestParam(name = "keyword") Optional<String> keyword) {
-        return keyword.map(bookService::listBooks).orElseGet(bookService::listBooks);
+    public List<BookEntity> bookList(@RequestParam(name = "keyword") Optional<String> keyword,
+                                     @RequestParam(name = "page", defaultValue = "0") Integer page) {
+        if (keyword.isPresent()) {
+            return bookService.listBooks(keyword.get(), page, pageSize);
+        } else {
+            return bookService.listBooks(page, pageSize);
+        }
     }
 
     @ResponseBody

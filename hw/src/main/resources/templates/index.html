@@ -28,6 +28,10 @@
         <tbody id="book-container">
         </tbody>
     </table>
+    <div class="btn-group">
+        <button id="prev-page" class="btn btn-primary" disabled>Prev page</button>
+        <button id="next-page" class="btn btn-primary">Next page</button>
+    </div>
 
     <hr>
     <form>
@@ -57,12 +61,13 @@
 <script>
     $(window).ready(() => {
         const $booksContainer = $('#book-container');
+        let page = 0;
 
         function loadBooks(keyword) {
             $booksContainer.empty().hide();
             $.ajax({
                 type: 'GET',
-                url: `http://localhost:8080/books${keyword ? `?keyword=${keyword}` : ''}`,
+                url: `http://localhost:8080/books?page=${page}${keyword ? `&keyword=${keyword}` : ''}`,
                 dataType: 'json',
                 contentType: 'application/json',
                 success: (data, status, xhr) => {
@@ -107,6 +112,22 @@
         $('#search').change((e) => {
             loadBooks($(e.target).val());
         });
+
+        $('#prev-page').click(() => {
+            page--;
+            if (!page) {
+                $('#prev-page').prop('disabled', true);
+            }
+            loadBooks();
+        })
+
+        $('#next-page').click(() => {
+            if (!page) {
+                $('#prev-page').prop('disabled', false);
+            }
+            page++;
+            loadBooks();
+        })
 
         loadBooks();
     });

@@ -20,12 +20,14 @@ public class BookService {
 
     private final BookRepository bookRepository;
 
-    public List<BookEntity> listBooks() {
-        return bookRepository.findAll();
+    public List<BookEntity> listBooks(final int page, final int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return bookRepository.findAll(pageable).toList();
     }
 
-    public List<BookEntity> listBooks(final String keyword) {
-        return bookRepository.findByKeyword("%" + keyword + "%");
+    public List<BookEntity> listBooks(final String keyword, final int page, final int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return bookRepository.findByKeyword("%" + keyword + "%", pageable).toList();
     }
 
     @Transactional
