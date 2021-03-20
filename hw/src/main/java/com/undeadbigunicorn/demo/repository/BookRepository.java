@@ -1,6 +1,6 @@
 package com.undeadbigunicorn.demo.repository;
 
-import com.undeadbigunicorn.demo.repository.entity.BookEntity;
+import com.undeadbigunicorn.demo.domain.entities.BookEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,6 +14,8 @@ import java.util.Optional;
 @Transactional
 @Repository
 public interface BookRepository extends JpaRepository<BookEntity, String> {
+
+    Optional<BookEntity> findById(final Integer isbn);
 
     Page<BookEntity> findAll(Pageable pageable);
 

@@ -1,10 +1,44 @@
 <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Index</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
 </head>
 <body>
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Book Keep</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/">Home</a>
+                    </li>
+
+                    <li th:if="${isLoggedIn}" class="nav-item">
+                        <a class="nav-link" href="/favourites">Favourites</a>
+                    </li>
+
+                    <li th:if="${isLoggedIn == false}" class="nav-item">
+                        <a class="nav-link btn btn-outline-success" href="/login">Login</a>
+                    </li>
+
+                    <li th:if="${isLoggedIn}" class="nav-item">
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </li>
+
+                </ul>
+                <form class="d-flex">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+</header>
 <div class="container">
 
     <div class="mb-3">
@@ -33,25 +67,27 @@
         <button id="next-page" class="btn btn-primary">Next page</button>
     </div>
 
-    <hr>
-    <form>
-        <div class="mb-3">
-            <label for="title" class="form-label">Title</label>
-            <input id="title" type="text" name="title" class="form-control" aria-describedby="titleHelp">
-            <div id="titleHelp" class="form-text">Beautiful title of the book</div>
-        </div>
-        <div class="mb-3">
-            <label for="isbn" class="form-label">ISBN</label>
-            <input id="isbn" type="text" name="isbn" class="form-control" aria-describedby="isbnHelp">
-            <div id="isbnHelp" class="form-text">International Standard Book Number of the book</div>
-        </div>
-        <div class="mb-3">
-            <label for="author" class="form-label">Author</label>
-            <input id="author" type="text" name="author" class="form-control" aria-describedby="authorHelp">
-            <div id="authorHelp" class="form-text">Author of the book</div>
-        </div>
-        <button id="add" class="btn btn-primary">Add Book</button>
-    </form>
+    <div th:if="${isLoggedIn}">
+        <hr>
+        <form>
+            <div class="mb-3">
+                <label for="title" class="form-label">Title</label>
+                <input id="title" type="text" name="title" class="form-control" aria-describedby="titleHelp">
+                <div id="titleHelp" class="form-text">Beautiful title of the book</div>
+            </div>
+            <div class="mb-3">
+                <label for="isbn" class="form-label">ISBN</label>
+                <input id="isbn" type="text" name="isbn" class="form-control" aria-describedby="isbnHelp">
+                <div id="isbnHelp" class="form-text">International Standard Book Number of the book</div>
+            </div>
+            <div class="mb-3">
+                <label for="author" class="form-label">Author</label>
+                <input id="author" type="text" name="author" class="form-control" aria-describedby="authorHelp">
+                <div id="authorHelp" class="form-text">Author of the book</div>
+            </div>
+            <button id="add" class="btn btn-primary">Add Book</button>
+        </form>
+    </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"

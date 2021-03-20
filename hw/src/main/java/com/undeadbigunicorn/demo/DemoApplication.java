@@ -1,6 +1,6 @@
 package com.undeadbigunicorn.demo;
 
-import com.undeadbigunicorn.demo.repository.entity.BookEntity;
+import com.undeadbigunicorn.demo.domain.entities.BookEntity;
 import com.undeadbigunicorn.demo.service.BookService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

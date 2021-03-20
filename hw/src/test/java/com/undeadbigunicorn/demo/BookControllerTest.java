@@ -2,7 +2,7 @@ package com.undeadbigunicorn.demo;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.undeadbigunicorn.demo.dto.BookResponseDto;
-import com.undeadbigunicorn.demo.repository.entity.BookEntity;
+import com.undeadbigunicorn.demo.domain.entities.BookEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;

@@ -1,4 +1,4 @@
-package com.undeadbigunicorn.demo.repository.entity;
+package com.undeadbigunicorn.demo.domain.entities;
 
 import lombok.*;
 

@@ -1,8 +1,7 @@
 package com.undeadbigunicorn.demo.service;
 
-import com.undeadbigunicorn.demo.dto.BookAddRequestDto;
 import com.undeadbigunicorn.demo.repository.BookRepository;
-import com.undeadbigunicorn.demo.repository.entity.BookEntity;
+import com.undeadbigunicorn.demo.domain.entities.BookEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;

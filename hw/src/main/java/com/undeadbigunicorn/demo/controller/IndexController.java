@@ -1,6 +1,6 @@
 package com.undeadbigunicorn.demo.controller;
 
-import com.undeadbigunicorn.demo.repository.entity.BookEntity;
+import com.undeadbigunicorn.demo.domain.helpers.RequestHelper;
 import com.undeadbigunicorn.demo.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -8,14 +8,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
 @RequiredArgsConstructor
 public class IndexController {
 
     private final BookService bookService;
+    private final RequestHelper requestHelper;
 
     @GetMapping("/")
-    public String index() {
+    public String index(HttpServletRequest request, Model model) {
+        model.addAttribute("isLoggedIn", requestHelper.isUserLoggedId(request));
         return "index";
     }
 
