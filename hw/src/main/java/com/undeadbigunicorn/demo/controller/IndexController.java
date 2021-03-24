@@ -3,6 +3,7 @@ package com.undeadbigunicorn.demo.controller;
 import com.undeadbigunicorn.demo.domain.helpers.RequestHelper;
 import com.undeadbigunicorn.demo.service.BookService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +24,12 @@ public class IndexController {
         return "index";
     }
 
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
+
+    @PreAuthorize("hasAuthority('VIEW_BOOK')")
     @GetMapping("/book/{isbn}")
     public String getBook(@PathVariable("isbn") final String isbn, Model model) {
         return bookService.getBookByIsbn(isbn)

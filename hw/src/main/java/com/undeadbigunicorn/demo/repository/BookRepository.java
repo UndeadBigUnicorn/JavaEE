@@ -13,9 +13,9 @@ import java.util.Optional;
 
 @Transactional
 @Repository
-public interface BookRepository extends JpaRepository<BookEntity, String> {
+public interface BookRepository extends JpaRepository<BookEntity, Integer> {
 
-    Optional<BookEntity> findById(final Integer isbn);
+    Optional<BookEntity> findById(final Integer id);
 
     Page<BookEntity> findAll(Pageable pageable);
 

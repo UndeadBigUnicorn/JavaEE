@@ -1,10 +1,13 @@
 package com.undeadbigunicorn.demo.service;
 
+import com.undeadbigunicorn.demo.domain.dto.UserDto;
 import com.undeadbigunicorn.demo.domain.entities.BookEntity;
 import com.undeadbigunicorn.demo.domain.entities.PermissionEntity;
 import com.undeadbigunicorn.demo.domain.entities.UserEntity;
 import com.undeadbigunicorn.demo.domain.exceptions.NotFoundException;
+import com.undeadbigunicorn.demo.domain.type.Permission;
 import com.undeadbigunicorn.demo.repository.BookRepository;
+import com.undeadbigunicorn.demo.repository.PermissionRepository;
 import com.undeadbigunicorn.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -22,10 +25,20 @@ import java.util.stream.Collectors;
 public class UserService {
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
+    private final PermissionRepository permissionRepository;
 
-    public void addNewUser(UserEntity user) {
-        userRepository.saveAndFlush(user);
-        log.info("Added new user #" + user.getId().toString());
+    public UserEntity addNewUser(final UserDto user) {
+        PermissionEntity permission = permissionRepository.findById(2)
+                .orElseThrow(() -> new NotFoundException("No permission found"));
+
+        UserEntity newUser = UserEntity.builder()
+                .login(user.getLogin())
+                .password(user.getPassword())
+                .permissions(List.of(permission))
+                .build();
+        userRepository.saveAndFlush(newUser);
+        log.info("Added new user #" + newUser.getId().toString());
+        return newUser;
     }
 
     public List<BookEntity> getFavouriteBooks(final UserEntity user) {
@@ -34,7 +47,8 @@ public class UserService {
 
     @SneakyThrows
     public List<BookEntity> addBookToFavourites(final UserEntity user, final Integer bookId) {
-        BookEntity book = bookRepository.findById(bookId).orElseThrow(() -> new NotFoundException("No book found"));
+        BookEntity book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new NotFoundException("No book found"));
 
         List<BookEntity> favouriteBooks = user.getFavouriteBooks();
 
@@ -50,7 +64,8 @@ public class UserService {
 
     @SneakyThrows
     public List<BookEntity> removeBookFromFavourites(final UserEntity user, final Integer bookId) {
-        BookEntity book = bookRepository.findById(bookId).orElseThrow(() -> new NotFoundException("No book found"));
+        BookEntity book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new NotFoundException("No book found"));
         List<BookEntity> favouriteBooks = user.getFavouriteBooks();
 
         favouriteBooks.removeIf((b) -> b.getId().equals(bookId));

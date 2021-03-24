@@ -67,7 +67,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        String[] patterns = new String[]{"/auth/**", "/books/**", "/"};
+        String[] patterns = new String[]{"/login", "/auth/**", "/books/**", "/"};
 
         // disable authentication for cors
         http.cors()

@@ -6,12 +6,11 @@ import com.undeadbigunicorn.demo.domain.entities.UserEntity;
 import com.undeadbigunicorn.demo.domain.exceptions.BadRequestException;
 import com.undeadbigunicorn.demo.domain.exceptions.NotFoundException;
 import com.undeadbigunicorn.demo.domain.helpers.RequestHelper;
+import com.undeadbigunicorn.demo.domain.dto.UserDto;
 import com.undeadbigunicorn.demo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,10 +47,8 @@ public class AuthController {
 
 
     @SneakyThrows
-    @PostMapping("/sign-in")
-    public ResponseEntity<UserEntity> signUserIn(@Valid @RequestBody UserEntity userLoginData, HttpServletResponse response) {
-        System.out.println(userLoginData);
-        System.out.println(userLoginData.getPassword());
+    @PostMapping("/signin")
+    public ResponseEntity<UserEntity> signUserIn(@Valid @RequestBody final UserDto userLoginData, HttpServletResponse response) {
 
         UserEntity user = userService.findByLogin(userLoginData.getLogin())
                 .orElseThrow(() -> new NotFoundException("No user with login: " + userLoginData.getLogin()));
@@ -77,8 +74,8 @@ public class AuthController {
     }
 
     @SneakyThrows
-    @PostMapping("/sign-up")
-    public ResponseEntity<UserEntity> signUserUp(@Valid @RequestBody UserEntity user) {
+    @PostMapping("/signup")
+    public ResponseEntity<UserEntity> signUserUp(@Valid @RequestBody final UserDto user) {
 
         if (userService.findByLogin(user.getLogin()).isPresent()) {
             throw new BadRequestException("User with this login already exists");
@@ -86,9 +83,9 @@ public class AuthController {
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        userService.addNewUser(user);
+        UserEntity newUser = userService.addNewUser(user);
 
-        log.info("User #" + user.getId() + " signed up");
+        log.info("User #" + newUser.getId() + " signed up");
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -105,7 +102,7 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED).headers(httpHeaders).build();
     }
 
-    @PostMapping("/log-out")
+    @PostMapping("/logout")
     public void logUserOut(HttpServletRequest request) {
         UserEntity currentUser = requestHelper.getCurrentUser(request);
         log.info("User #" + currentUser.getId() + " logged out");

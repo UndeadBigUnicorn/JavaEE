@@ -1,4 +1,4 @@
-package com.undeadbigunicorn.demo.dto;
+package com.undeadbigunicorn.demo.domain.dto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -9,8 +9,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @RequiredArgsConstructor(staticName = "of")
-public class BookAddRequestDto {
+public class BookResponseDto {
     private final String title;
-    private final String isbn;
-    private final String author;
+    private final String message;
 }

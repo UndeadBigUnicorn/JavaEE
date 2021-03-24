@@ -1,5 +1,7 @@
 package com.undeadbigunicorn.demo.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,7 +20,7 @@ import java.util.List;
 public class UserEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
@@ -30,7 +32,8 @@ public class UserEntity {
 
     @Column(name = "password")
     @NotNull(message = "Password cannot be empty")
-    @Size(min = 8, max = 40)
+    @Size(min = 8, max = 100)
+    @JsonIgnore
     private String password;
 
     @ManyToMany

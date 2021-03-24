@@ -1,7 +1,7 @@
 package com.undeadbigunicorn.demo.controller;
 
-import com.undeadbigunicorn.demo.dto.BookAddRequestDto;
-import com.undeadbigunicorn.demo.dto.BookResponseDto;
+import com.undeadbigunicorn.demo.domain.dto.BookDto;
+import com.undeadbigunicorn.demo.domain.dto.BookResponseDto;
 import com.undeadbigunicorn.demo.domain.entities.BookEntity;
 import com.undeadbigunicorn.demo.service.BookService;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,7 +36,7 @@ public class BookController {
     @PreAuthorize("hasAuthority('ADD_BOOK')")
     @ResponseBody
     @PostMapping("/books")
-    public ResponseEntity<BookResponseDto> addNewBook(@RequestBody final BookAddRequestDto book) {
+    public ResponseEntity<BookResponseDto> addNewBook(@Valid @RequestBody final BookDto book) {
         BookEntity newBook = BookEntity.builder()
                 .isbn(book.getIsbn())
                 .title(book.getTitle())
